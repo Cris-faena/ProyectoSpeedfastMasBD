@@ -90,9 +90,6 @@ public class Pedido
      */
     public String toString()
     {
-        return String.format("El ID del pedido es: %s.%n" +
-                "La dirección del pedido es: %s.%n" +
-                "El tipo de pedido es: %s.%n" +
-                "El estado del pedido es: %s.%n", id_pedido, direccion_pedido, tipo_pedido, estado_pedido);
+        return "ID: " + id_pedido + " " + "-" + " " + direccion_pedido;
     }
 }

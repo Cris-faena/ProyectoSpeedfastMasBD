@@ -55,7 +55,6 @@ public class Repartidor
      */
     public String toString()
     {
-        return String.format("El Id del repartidor es: %d.%n" +
-                "El nombre del repartidor es: %s.%n",  id_repartidor, nombre_repartidor);
+        return "ID: " + id_repartidor + " " + "-" + " " + nombre_repartidor;
     }
 }

@@ -19,8 +19,8 @@ public class Pantalla extends JFrame
 {
     // Se cargan los respectivos componentes
     private JPanel PanelPrincipal;
-    private JPanel Panel1;
-    private JPanel panel2;
+    private JPanel PanelNombreRepartidor;
+    private JPanel PanelTablaEntregas;
     private JTextField txtIdRepartidor;
     private JTextField txtNombreRepartidor;
     private JTextField txtIDPedido;
@@ -30,7 +30,6 @@ public class Pantalla extends JFrame
     private JTable tblRepartidor;
     private JTable tblPedido;
     private JTable tblEntrega;
-    private JPanel panel3;
     private JLabel lblRepartidor;
     private JLabel lblNombreRepartidor;
     private JLabel lblPedido;
@@ -78,7 +77,7 @@ public class Pantalla extends JFrame
     private JTextField txtFiltrarIdEntrega;
     private JButton btnAplicarFlitro;
     private JTextField txtFiltrarPedidoEntrega;
-    private JPanel PanleCreacionEntrega;
+    private JPanel PanelCreacionEntrega;
     private JLabel lblSeleccionEntrega;
     private JComboBox jcb_id_repartidor;
     private JComboBox jcb_ID_PedidO;
@@ -89,6 +88,7 @@ public class Pantalla extends JFrame
     private JScrollPane jspTablaRepartidor;
     private JScrollPane jspTablaPedido;
     private JScrollPane jspTablaEntrega;
+    private JPanel PanelTxtPedidos;
 
     // Se implementan 3 tablas "DefaultMOdel" para cada una de las entidades (ENTREGA - REPARTIDOR y PEDIDO)
     private DefaultTableModel modeloTablaEntrega;
@@ -143,11 +143,14 @@ public class Pantalla extends JFrame
 
         // Se agrega cada tabla al JScrollPane:
         jspTablaRepartidor.setViewportView(tblRepartidor);
-        jspTablaRepartidor.setPreferredSize(new Dimension(400, 150));
+        jspTablaRepartidor.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jspTablaRepartidor.setPreferredSize(new Dimension(350, 150));
         jspTablaPedido.setViewportView(tblPedido);
-        jspTablaPedido.setPreferredSize(new Dimension(400, 150));
+        jspTablaPedido.setPreferredSize(new Dimension(350, 150));
+        jspTablaEntrega.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jspTablaEntrega.setViewportView(tblEntrega);
-        jspTablaEntrega.setPreferredSize(new Dimension(400, 150));
+        jspTablaEntrega.setPreferredSize(new Dimension(350, 150));
+        jspTablaPedido.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Se cambia el color para las JTables:
         tblRepartidor.setBackground(new Color(255, 245, 230));
@@ -169,12 +172,12 @@ public class Pantalla extends JFrame
         txtFiltrarPedidoEntrega.setMaximumSize(new Dimension(100, 20));
 
         //Se ajustan los tamaños de los JComboBox:
-        jcb_ID_PedidO.setPreferredSize(new Dimension(100, 20));
-        jcb_ID_PedidO.setMinimumSize(new Dimension(100, 20));
-        jcb_ID_PedidO.setMaximumSize(new Dimension(100, 20));
-        jcb_id_repartidor.setPreferredSize(new Dimension(100, 20));
-        jcb_id_repartidor.setMinimumSize(new Dimension(100, 20));
-        jcb_id_repartidor.setMaximumSize(new Dimension(100, 20));
+        jcb_ID_PedidO.setPreferredSize(new Dimension(200, 20));
+        jcb_ID_PedidO.setMinimumSize(new Dimension(200, 20));
+        jcb_ID_PedidO.setMaximumSize(new Dimension(200, 20));
+        jcb_id_repartidor.setPreferredSize(new Dimension(200, 20));
+        jcb_id_repartidor.setMinimumSize(new Dimension(200, 20));
+        jcb_id_repartidor.setMaximumSize(new Dimension(200, 20));
 
         // Se agregan las funcionalidades para los botones del panel de repartidores.
         btnAgregarRep.addActionListener(event -> {agregarRepartidor();});
@@ -243,7 +246,7 @@ public class Pantalla extends JFrame
         jcb_id_repartidor.removeAllItems();
         for (Repartidor r : controladorRepartidor.obtenerTodosLosRepartidores())
         {
-            jcb_id_repartidor.addItem(r.getId_repartidor());
+            jcb_id_repartidor.addItem(r.toString());
         }
 
     }
@@ -258,7 +261,7 @@ public class Pantalla extends JFrame
         jcb_ID_PedidO.removeAllItems();
         for (Pedido p : controladorPedido.obtenerTodosLosPedidos())
         {
-            jcb_ID_PedidO.addItem(p.getId_pedido());
+            jcb_ID_PedidO.addItem(p.toString());
         }
     }
 
@@ -282,9 +285,9 @@ public class Pantalla extends JFrame
         tblPedido.setModel(modeloTablaPedidos);
         tblPedido.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tblPedido.getColumnModel().getColumn(0).setPreferredWidth(95);   // ID_pedido
-        tblPedido.getColumnModel().getColumn(1).setPreferredWidth(250);  // Dirección
-        tblPedido.getColumnModel().getColumn(2).setPreferredWidth(180);  // Tipo
-        tblPedido.getColumnModel().getColumn(3).setPreferredWidth(180);  // Estado
+        tblPedido.getColumnModel().getColumn(1).setPreferredWidth(220);  // Dirección
+        tblPedido.getColumnModel().getColumn(2).setPreferredWidth(193);  // Tipo
+        tblPedido.getColumnModel().getColumn(3).setPreferredWidth(193);  // Estado
 
         tblPedido.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -556,6 +559,7 @@ public class Pantalla extends JFrame
         {
             JOptionPane.showMessageDialog(this, "Repartidor editado correctamente");
             cargarTablaRepartidores();
+            cargarCategoriasJComboBoxRepartidor();
         }
         else
         {
@@ -592,6 +596,7 @@ public class Pantalla extends JFrame
             idRepartidorSeleccionado = -1;
             txtNombreRepartidor.setText("");
             cargarTablaRepartidores();
+            cargarCategoriasJComboBoxRepartidor();
         }
         else
         {
@@ -716,6 +721,7 @@ public class Pantalla extends JFrame
         {
             JOptionPane.showMessageDialog(this, "Pedido editado correctamente");
             cargarTablaPedidos();
+            cargarCategoriasJComboBoxPedido();
         }
         else
         {
@@ -753,6 +759,7 @@ public class Pantalla extends JFrame
             idPedidoSeleccionado = -1;
             txtDireccionPed.setText("");
             cargarTablaPedidos();
+            cargarCategoriasJComboBoxPedido();
         }
         else
         {
