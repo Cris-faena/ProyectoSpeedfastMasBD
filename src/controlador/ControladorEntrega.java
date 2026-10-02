@@ -117,4 +117,14 @@ public class ControladorEntrega
     {
         return daoE.existePedidoEnEntrega(idPedido);
     }
+
+    /**
+     * Método que permite confirmar si un repartidor existe en la tabla "Entrega" de la BD.
+     * @param idRepartidor "id" del repartidor que se requiere saber si ya está almacenado en la BD.
+     * @return "true" si existe en la BD de la tabla entrega, "false" si no existe.
+     */
+    public Boolean existeEsteRepartidor(int idRepartidor)
+    {
+        return daoE.existeRepartidorEnEntrega(idRepartidor);
+    }
 }

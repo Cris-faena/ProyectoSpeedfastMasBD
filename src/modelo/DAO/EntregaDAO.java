@@ -265,10 +265,16 @@ public class EntregaDAO
         return e;
     }
 
+    /**
+     * Método que verifica si un pedido existe en la tabla entrega de la BD.
+     * Útil para validar entradas al utilizar filtros.
+     * @param idPedido "id" del pedido que se requiere preguntar.
+     * @return "true" si existe, "false" si no existe.
+     */
     public Boolean existePedidoEnEntrega(int idPedido)
     {
         List<Entrega> lista = new ArrayList<>();
-        String sql = "SELECT * FROM entrega WHERE id_pedido = ? ORDER BY fecha DESC, hora DESC";
+        String sql = "SELECT 1 FROM entrega WHERE id_pedido = ? LIMIT 1";
 
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -277,15 +283,42 @@ public class EntregaDAO
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    lista.add(mapearEntrega(rs));
+                    return true;
                 }
             }
+        }
+        catch (SQLException e)
+        {
+            System.err.println("Error al buscar pedidos por repartidor: " + e.getMessage());
+        }
+        return false;
+    }
 
+    /**
+     * Método que verifica si un repartidor existe en la tabla entrega de la BD.
+     * Útil para validar entradas al utilizar filtros.
+     * @param idRepartidor "id" del repartidor que se requiere preguntar.
+     * @return "true" si existe, "false" si no existe.
+     */
+    public Boolean existeRepartidorEnEntrega(int idRepartidor)
+    {
+        List<Entrega> lista = new ArrayList<>();
+        String sql = "SELECT 1 FROM entrega WHERE id_repartidor = ? LIMIT 1";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idRepartidor);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    return true;
+                }
+            }
         } catch (SQLException e) {
             System.err.println("Error al buscar pedidos por repartidor: " + e.getMessage());
-            return false;
         }
-        return true;
+        return false;
     }
 }
 

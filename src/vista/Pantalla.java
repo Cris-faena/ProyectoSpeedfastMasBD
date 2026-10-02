@@ -951,40 +951,53 @@ public class Pantalla extends JFrame
     private void aplicarFlitro()
     {
         idPedidoSeleccionado = -1;
+
         String idRepartidorTxt = txtFiltrarIdRepartidorEntrega.getText().trim();
         String idPedidoTxt = txtFiltrarPedidoEntrega.getText().trim();
 
-        if (!idPedidoTxt.isEmpty() && !idRepartidorTxt.isEmpty())
-        {
+        // Validación: ambos vacíos
+        if (idRepartidorTxt.isEmpty() && idPedidoTxt.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar el ID del repartidor o pedido");
+            return;
+        }
+
+        // Validación: ambos llenos
+        if (!idRepartidorTxt.isEmpty() && !idPedidoTxt.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Sólo se puede agregar un filtro");
+            return;
         }
 
-        if (idPedidoTxt.isEmpty() && idRepartidorTxt.isEmpty())
-        {
-            JOptionPane.showMessageDialog(this, "Debe agregar, a lo menos, un filtro");
-        }
+        try {
+            // FILTRO POR REPARTIDOR
+            if (!idRepartidorTxt.isEmpty()) {
 
-        try
-        {
-            if (!idRepartidorTxt.isEmpty())
-            {
-                List<Entrega> listaEntregaRepartidor;
                 int idRepartidor = Integer.parseInt(idRepartidorTxt);
-                listaEntregaRepartidor = controladorEntrega.buscarEntregaPorRepartidor(idRepartidor);
-                cargarTablaEntregasFiltradaPorRepartidorOPedido(listaEntregaRepartidor);
+
+                if (!controladorEntrega.existeEsteRepartidor(idRepartidor)) {
+                    JOptionPane.showMessageDialog(this, "Este repartidor no existe");
+                    return;
+                }
+                List<Entrega> lista = controladorEntrega.buscarEntregaPorRepartidor(idRepartidor);
+                cargarTablaEntregasFiltradaPorRepartidorOPedido(lista);
                 return;
             }
-            if (!idPedidoTxt.isEmpty())
-            {
-                List<Entrega> listaEntregaPedido;
+
+            // FILTRO POR PEDIDO
+            if (!idPedidoTxt.isEmpty()) {
+
                 int idPedido = Integer.parseInt(idPedidoTxt);
-                listaEntregaPedido = controladorEntrega.buscarEntregaPorPedidoLista(idPedido);
-                cargarTablaEntregasFiltradaPorRepartidorOPedido(listaEntregaPedido);
+
+                if (!controladorEntrega.existeEstePedido(idPedido)) {
+                    JOptionPane.showMessageDialog(this, "Este pedido no existe");
+                    return;
+                }
+
+                List<Entrega> lista = controladorEntrega.buscarEntregaPorPedidoLista(idPedido);
+                cargarTablaEntregasFiltradaPorRepartidorOPedido(lista);
                 return;
             }
-        }
-        catch (NumberFormatException e)
-        {
+
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Debe ingresar un Id válido");
         }
     }
