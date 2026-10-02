@@ -246,7 +246,7 @@ public class Pantalla extends JFrame
         jcb_id_repartidor.removeAllItems();
         for (Repartidor r : controladorRepartidor.obtenerTodosLosRepartidores())
         {
-            jcb_id_repartidor.addItem(r.toString());
+            jcb_id_repartidor.addItem(r);
         }
 
     }
@@ -261,7 +261,7 @@ public class Pantalla extends JFrame
         jcb_ID_PedidO.removeAllItems();
         for (Pedido p : controladorPedido.obtenerTodosLosPedidos())
         {
-            jcb_ID_PedidO.addItem(p.toString());
+            jcb_ID_PedidO.addItem(p);
         }
     }
 
@@ -842,10 +842,17 @@ public class Pantalla extends JFrame
      */
     private void crearEntrega()
     {
-        Entrega e = new Entrega();
+        Repartidor r = (Repartidor) jcb_id_repartidor.getSelectedItem();
+        Pedido p = (Pedido) jcb_ID_PedidO.getSelectedItem();
 
-        int id_repartidor = Integer.parseInt(jcb_id_repartidor.getSelectedItem().toString().trim());
-        int id_pedido = Integer.parseInt(jcb_ID_PedidO.getSelectedItem().toString().trim());
+        int id_repartidor = r.getId_repartidor();
+        int id_pedido = p.getId_pedido();
+
+        if (r == null || p == null)
+        {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un Repartidor y un Pedido");
+            return;
+        }
 
         if (jcb_ID_PedidO.getSelectedIndex() == -1 || jcb_id_repartidor.getSelectedIndex() == -1)
         {
@@ -855,6 +862,7 @@ public class Pantalla extends JFrame
                     JOptionPane.WARNING_MESSAGE);
                     return;
         }
+
         boolean existePedido = controladorEntrega.existeEstePedido(id_pedido);
         if (!existePedido)
         {
@@ -862,6 +870,7 @@ public class Pantalla extends JFrame
             return;
         }
 
+        Entrega e = new Entrega();
         e.setId_repartidor(id_repartidor);
         e.setId_pedido(id_pedido);
         e.setFecha(LocalDate.now());
