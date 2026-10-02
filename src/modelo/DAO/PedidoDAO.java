@@ -1,10 +1,17 @@
-package modelo;
+package modelo.DAO;
 
 import ConexionBD.ConexionBD;
+import modelo.EstadoPedido;
+import modelo.Pedido;
+import modelo.TipoPedido;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que representa un objeto tipo pedido para manipular en la base de datos.
+ */
 public class PedidoDAO
 {
     // ===================== AGREGAR PEDIDO =====================
@@ -168,5 +175,75 @@ public class PedidoDAO
         }
 
         return null;
+    }
+
+    /**
+     * Método que permite filtrar los pedidos por 'Tipo' o 'Estado'
+     * @param tipo Enum de tipo 'pedido' (COMIDA - ENCOMIENDA - EXPRESS)
+     * @param estado Enum de tipo 'estado' (PENDIENTE - EN_REPARTO - ENTREGADO)
+     * @return una lista tipo 'pedidos' filtrados según parámetros
+     */
+    public List<Pedido> filtrarPorTipoOEstado(TipoPedido tipo, EstadoPedido estado)
+    {
+        // Se implementa una lista 'Pedido' vacía, de tipo ARRAYLIST para almacenar los valores:
+        List<Pedido> lista = new ArrayList<>();
+
+        // Se implementa un StringBuilder que contiene la sentencia SQl.
+        // Implementa un WHERE 1=1 que permitirá agregar filtros opcionales
+        StringBuilder sql = new StringBuilder("SELECT * FROM pedido WHERE 1=1");
+
+        // Se implementa una lista de objetos vacía
+        List<Object> parametros = new ArrayList<>();
+
+        // Si el tipo ingresado es distinto de "NULL":
+        if (tipo != null)
+        {
+            sql.append(" AND tipo = ?"); // agrega esto a la sentencia almacenada.
+            parametros.add(tipo.name()); // agrega el nombre del tipo a la lista de parámetros.
+        }
+
+        // Si el estado ingresado es distinto de "NULL":
+        if (estado != null)
+        {
+            sql.append(" AND estado = ?"); // agrega esto a la sentencia almacenada.
+            parametros.add(estado.name()); // agrega el nombre del estado a la lista de parámetros.
+        }
+
+        sql.append(" ORDER BY id"); // finalmente, agrega 'ordenado por: id'
+        // EJEMPLO DE SENTENCIA SQL: SELECT * FROM pedido WHERE 1=1 AND tipo=? AND estado =? ORDER BY id;
+
+        // Intenta conectar a la base de datos y almacena la sentencia SQL en un objeto tipo "Prepared Statement".
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            // Asigna parámetros dinámicos:
+            // Parametros.size = obtiene cuantos valores hay en la lista (o sea, cuantos '?' se agregaron).
+            // Parametros.get = obtiene el valor de la posición "i" de la lista.
+            for (int i = 0; i < parametros.size(); i++)
+            {
+                // asigna ese valor de la lista, en la posición i + 1.
+                ps.setObject(i + 1, parametros.get(i));
+            }
+
+            // guarda el resultado de la consulta 'ps.executeQuery' en el objeto ResultSet 'rs'.
+            ResultSet rs = ps.executeQuery();
+
+            // recorre los resultados de la consulta y ve creando objetos pedidos hasta que no haya otro valor:
+            while (rs.next()) {
+                Pedido pedido = new Pedido(
+                        rs.getInt("id"),
+                        rs.getString("direccion"),
+                        TipoPedido.valueOf(rs.getString("tipo")),
+                        EstadoPedido.valueOf(rs.getString("estado"))
+                );
+                // Agrégalo a la lista
+                lista.add(pedido);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al filtrar pedidos: " + e.getMessage());
+        }
+        // finalmente, devuelve la lista con los resultados
+        return lista;
     }
 }

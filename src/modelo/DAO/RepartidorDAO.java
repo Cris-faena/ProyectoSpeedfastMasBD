@@ -1,6 +1,8 @@
-package modelo;
+package modelo.DAO;
 
 import ConexionBD.ConexionBD;
+import modelo.Repartidor;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,12 @@ public class RepartidorDAO
     }
 
     // ===================== EDITAR =====================
+
+    /**
+     * Método que permite editar un objeto tipo "Repartidor" a la base de datos.
+     * @param repartidor objeto tipo "repartidor" para editar.
+     * @return "true" si se logó editar, "false" si no se pudo.
+     */
     public boolean editar(Repartidor repartidor)
     {
         String sql = "UPDATE repartidor SET nombre = ? WHERE id= ?";
@@ -60,6 +68,12 @@ public class RepartidorDAO
     }
 
     // ===================== ELIMINAR =====================
+
+    /**
+     * Método que permite eliminar un repartidor de la base de datos.
+     * @param idRepartidor "id" del repartidor que se requiere eliminar.
+     * @return "true" si se pudo eliminar, "false" si no se pudo.
+     */
     public boolean eliminar(int idRepartidor)
     {
         String sql = "DELETE FROM repartidor WHERE id = ?";
@@ -79,6 +93,11 @@ public class RepartidorDAO
     }
 
     // ===================== LISTAR TODOS =====================
+
+    /**
+     * Método que permite listar todos los repartidores almacenados en la BD.
+     * @return una lista de objetos tipo "Repartidor" que se encuentran almacenados en la BD.
+     */
     public List<Repartidor> listarTodos()
     {
         List<Repartidor> lista = new ArrayList<>();
@@ -107,6 +126,12 @@ public class RepartidorDAO
     }
 
     // ===================== BUSCAR POR ID =====================
+
+    /**
+     * Método que devuelve un repartidor almacenado en la BD por el "ID" ingresado
+     * @param idRepartidor "ID" del repartidor que se requiere buscar.
+     * @return un objeto tipo "Repartidor".
+     */
     public Repartidor buscarPorId(int idRepartidor)
     {
         String sql = "SELECT * FROM repartidor WHERE id = ?";
@@ -124,7 +149,6 @@ public class RepartidorDAO
                         rs.getString("nombre")
                 );
             }
-
         }
         catch (SQLException e)
         {

@@ -1,7 +1,7 @@
 package controlador;
 
 import modelo.Repartidor;
-import modelo.RepartidorDAO;
+import modelo.DAO.RepartidorDAO;
 import java.util.List;
 
 /**

@@ -1,7 +1,10 @@
 package controlador;
 
+import modelo.EstadoPedido;
 import modelo.Pedido;
-import modelo.PedidoDAO;
+import modelo.DAO.PedidoDAO;
+import modelo.TipoPedido;
+
 import java.util.List;
 
 /**
@@ -65,4 +68,13 @@ public class ControladorPedido
     public Pedido buscarPedidoPorId(int idPedido) {
         return daoP.buscarPorId(idPedido);
     }
+
+    /**
+     * Método dinámico para filtrar la tabla 'Pedido' por tipo o estado
+     * @param tipo Enum de TipoPedido (COMIDA - ENCOMIENDA - EXPRESS)
+     * @param estado Enum de EstadoPedido (PENDIENTE - EN_REPARTO - ENTREGADO)
+     * @return una lista filtrada por los valores ingresados.
+     */
+    public List<Pedido> filtrarPorTipoOEstado(TipoPedido tipo, EstadoPedido estado)
+    {return daoP.filtrarPorTipoOEstado(tipo,estado);}
 }

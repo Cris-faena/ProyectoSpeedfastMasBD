@@ -1,6 +1,9 @@
 package controlador;
 
 import modelo.*;
+import modelo.DAO.EntregaDAO;
+import modelo.DAO.PedidoDAO;
+import modelo.DAO.RepartidorDAO;
 
 import java.util.List;
 
@@ -75,11 +78,43 @@ public class ControladorEntrega
 
     // ===================== BUSCAR POR ID =====================
 
-    /** Método para buscar un elemento específico en la base de datos.
-     * @param idEntrega "id" del elemento que desea buscar.
-     * @return "entrega" solicitada
+    /**
+     * Método para buscar un elemento específico en la base de datos.
+     * @param idPedido "id" del elemento que desea buscar.
+     * @return "Pedido" solicitada
      */
-    public Entrega buscarEntregaPorId(int idEntrega) {
-        return daoE.buscarPorId(idEntrega);
+    public Entrega buscarEntregaPorPedido(int idPedido)
+    {
+        return daoE.buscarPorId(idPedido);
+    }
+
+    /**
+     * Método que devuelve una lista de objetos "Entrega" filtrada por el idRepartidor ingresado.
+     * @param idRepartidor identificador único de un repartidor almacenado previamente en la BD.
+     * @return una lista de objetos "Entrega" filtrada por el "id" del repartidor.
+     */
+    public List<Entrega> buscarEntregaPorRepartidor(int idRepartidor)
+    {
+        return daoE.buscarPorRepartidor(idRepartidor);
+    }
+
+    /**
+     * Método que devuelve una lista de objetos "Pedido" filtrada por el idPedido ingresado
+     * @param idPedido identificador único de un repartidor almacenado previamente en la BD.
+     * @return una lista de objetos "Entrega" filtrada por el "id" del pedido.
+     */
+    public List<Entrega> buscarEntregaPorPedidoLista(int idPedido)
+    {
+        return daoE.buscarPorPedidoLista(idPedido);
+    }
+
+    /**
+     * Método que permite confirmar si un pedido existe en la tabla "Entrega" de la BD.
+     * @param idPedido "id" del pedido que se requiere saber si ya está almacenado en la BD.
+     * @return "true" si existe en la BD de la tabla entrega, "false" si no existe.
+     */
+    public Boolean existeEstePedido(int idPedido)
+    {
+        return daoE.existePedidoEnEntrega(idPedido);
     }
 }

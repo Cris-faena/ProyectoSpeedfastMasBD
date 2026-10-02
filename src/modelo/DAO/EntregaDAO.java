@@ -1,7 +1,8 @@
-package modelo;
+package modelo.DAO;
 
 import ConexionBD.ConexionBD;
-import controlador.*;
+import modelo.Entrega;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -180,6 +181,33 @@ public class EntregaDAO
         return lista;
     }
 
+    /**
+     * Método que devuelve una lista de entregas que contenga el IdPedido Seleccionado.
+     * @param idPedido id del repartidor que se quiere asociar a una entrega.
+     * @return una lista de entregas donde se encuentre el id del repartidor especificado.
+     */
+    public List<Entrega> buscarPorPedidoLista(int idPedido)
+    {
+        List<Entrega> lista = new ArrayList<>();
+        String sql = "SELECT * FROM entrega WHERE id_pedido = ? ORDER BY fecha DESC, hora DESC";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idPedido);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(mapearEntrega(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al buscar pedidos por repartidor: " + e.getMessage());
+        }
+        return lista;
+    }
+
     // ========== ENCONTRAR POR PEDIDO ==========
 
     /**
@@ -215,7 +243,8 @@ public class EntregaDAO
      * @return un objeto tipo Entrega
      * @throws SQLException lanza una excepciónSQL en caso de fallas.
      */
-    private Entrega mapearEntrega(ResultSet rs) throws SQLException {
+    private Entrega mapearEntrega(ResultSet rs) throws SQLException
+    {
         Entrega e = new Entrega(
                 rs.getInt("id"),
                 rs.getInt("id_repartidor"),
@@ -234,6 +263,29 @@ public class EntregaDAO
         }
 
         return e;
+    }
+
+    public Boolean existePedidoEnEntrega(int idPedido)
+    {
+        List<Entrega> lista = new ArrayList<>();
+        String sql = "SELECT * FROM entrega WHERE id_pedido = ? ORDER BY fecha DESC, hora DESC";
+
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idPedido);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(mapearEntrega(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al buscar pedidos por repartidor: " + e.getMessage());
+            return false;
+        }
+        return true;
     }
 }
 
