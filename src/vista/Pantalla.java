@@ -620,15 +620,23 @@ public class Pantalla extends JFrame
     private void filtrarRepartidorId()
     {
         idRepartidorSeleccionado = -1;
+         int idRepartidor;
         // si el campo para filtrar el repartidor está vacío, lanza este cuadro emergente:
         if (txtIdRepartidorFiltro.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(this, "Debe ingresar un ID en el campo");
             return;
         }
-        // la variable "int idRepartidor" es igual al valor ingresado en el campo para filtrar el repartidor.
-        int idRepartidor = Integer.parseInt(txtIdRepartidorFiltro.getText().trim());
-        // El objeto tipo "Repartidor" llamado "repartidorFiltrado" es igual al resultado de la consulta "buscarRepartidor"
+        try
+        {
+            idRepartidor = Integer.parseInt(txtIdRepartidorFiltro.getText().trim());
+        }
+        catch (NumberFormatException e)
+        {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un número entero en el campo");
+            return;
+        }
+        // El objeto tipo "Repartidor", llamado "repartidorFiltrado" es igual al resultado de la consulta "buscarRepartidor"
         // Se pasa como parámetro el valor obtenido del campo filtrar ingresado por el usuario
         Repartidor repartidorFiltrado = controladorRepartidor.buscarRepartidorPorId(idRepartidor);
         // Si el ID ingresado por el usuario no existe, lanza este cuadro emergente:
@@ -861,13 +869,6 @@ public class Pantalla extends JFrame
                     "Error",
                     JOptionPane.WARNING_MESSAGE);
                     return;
-        }
-
-        boolean existePedido = controladorEntrega.existeEstePedido(id_pedido);
-        if (!existePedido)
-        {
-            JOptionPane.showMessageDialog(this, "Este pedido no existe");
-            return;
         }
 
         Entrega e = new Entrega();

@@ -90,6 +90,6 @@ public class Pedido
      */
     public String toString()
     {
-        return "ID: " + id_pedido + " " + "-" + " " + direccion_pedido;
+        return id_pedido + " " + "-" + " " + direccion_pedido;
     }
 }

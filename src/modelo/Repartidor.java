@@ -55,6 +55,6 @@ public class Repartidor
      */
     public String toString()
     {
-        return "ID: " + id_repartidor + " " + "-" + " " + nombre_repartidor;
+        return id_repartidor + " " + "-" + " " + nombre_repartidor;
     }
 }
